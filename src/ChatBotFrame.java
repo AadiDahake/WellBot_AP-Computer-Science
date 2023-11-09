@@ -128,8 +128,10 @@ public class ChatBotFrame extends JFrame {
             appendToChat("User: " + userInput, true);
             // WE NEED TO ADD CHAT BOT LOGIC HERE
 
-            appendToChat("ChatBot: " + userInput, false); // place holder. remove once ready to add logic
-            inputField.setText(""); // place holder. remove once ready to add logic
+            String botResponse = ChatBot.respondTo(userInput);
+            appendToChat("ChatBot: " + botResponse, false);
+
+            inputField.setText("");
         }
     }
 
