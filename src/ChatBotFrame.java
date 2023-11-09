@@ -3,6 +3,8 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ChatBotFrame extends JFrame {
     private JTextPane chatPane;
@@ -10,30 +12,31 @@ public class ChatBotFrame extends JFrame {
     private JButton submitButton;
     private Timer cursorTimer;
 
-    // Declare user and robot response colors
-    private Color userPromptColor = new Color(255, 255, 255);
-    private Color robotResponseColor = new Color(180, 90, 180); // Purple
     private Color backgroundColor = new Color(40, 40, 40);
+    private Color chatAreaColor = new Color(60, 60, 60);
     private Color textColor = new Color(255, 255, 255);
-    private Color robotResponseBoxColor = new Color(220, 180, 255); // Light Purple
-
+    private Color userPromptColor = new Color(240, 240, 240); // Off-white
+    private Color robotResponseColor = new Color(180, 90, 180); // Pastel purple
+    private Font textFont = new Font("Montserrat", Font.PLAIN, 14);
 
     public ChatBotFrame(String title) {
         super(title);
 
-        // Set pastel dark color scheme
-        Color chatAreaColor = new Color(60, 60, 60);
-        Font textFont = new Font("Montserrat", Font.PLAIN, 14);
-
         // Set the layout manager
         setLayout(new BorderLayout());
 
-        // Create chat pane
+        // Create chat area
         chatPane = new JTextPane();
         chatPane.setEditable(false);
         chatPane.setBackground(chatAreaColor);
         chatPane.setForeground(textColor);
         chatPane.setFont(textFont);
+
+        // Set up styled document for formatting
+        StyledDocument styledDoc = chatPane.getStyledDocument();
+
+        JScrollPane scrollPane = new JScrollPane(chatPane);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         // Create input field
         inputField = new JTextField();
@@ -45,9 +48,20 @@ public class ChatBotFrame extends JFrame {
         inputField.setForeground(textColor);
         inputField.setFont(textFont);
 
-        // Create submit button with icon
-        ImageIcon submitIcon = new ImageIcon("path/to/your/icon.png"); // Replace with your icon path
-        submitButton = new JButton(submitIcon);
+        // Make pressing "Enter" submit
+        inputField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    sendMessage();
+                }
+            }
+        });
+
+        // Create submit button with resized icon
+        ImageIcon submitIcon = new ImageIcon(getClass().getResource("/icon.png")); // Replace with your icon file name
+        ImageIcon resizedIcon = new ImageIcon(submitIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        submitButton = new JButton(resizedIcon);
         submitButton.setBackground(chatAreaColor);
         submitButton.setBorderPainted(false);
         submitButton.setFocusPainted(false);
@@ -66,7 +80,7 @@ public class ChatBotFrame extends JFrame {
         inputPanel.add(submitButton, BorderLayout.EAST);
 
         getContentPane().setBackground(backgroundColor);
-        getContentPane().add(chatPane, BorderLayout.CENTER);
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
         getContentPane().add(inputPanel, BorderLayout.SOUTH);
 
         // Set up animated typing cursor
@@ -76,9 +90,9 @@ public class ChatBotFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (cursorVisible) {
-                    inputField.setCaretColor(backgroundColor);
+                    inputField.setCaretColor(textColor); // Change cursor color to white
                 } else {
-                    inputField.setCaretColor(textColor);
+                    inputField.setCaretColor(backgroundColor);
                 }
                 cursorVisible = !cursorVisible;
             }
@@ -95,63 +109,51 @@ public class ChatBotFrame extends JFrame {
     private void sendMessage() {
         String userInput = inputField.getText().trim();
         if (!userInput.isEmpty()) {
-            appendToChat("User: " + userInput, userPromptColor, backgroundColor);
+            appendToChat("User: " + userInput, true);
             // Add your chatbot logic here
             // For simplicity, let's just echo the user input
-            appendToChat("ChatBot: " + userInput, robotResponseColor, robotResponseBoxColor);
+            appendToChat("ChatBot: " + userInput, false);
             inputField.setText("");
         }
     }
 
-
-    private void appendToChat(String message, Color textColor, Color boxColor) {
-        StyledDocument doc = chatPane.getStyledDocument();
-
-        // Create a style with the specified text color
-        SimpleAttributeSet textStyle = new SimpleAttributeSet();
-        StyleConstants.setForeground(textStyle, textColor);
-
-        // Create a style with the specified box color
-        SimpleAttributeSet boxStyle = new SimpleAttributeSet();
-        StyleConstants.setBackground(boxStyle, boxColor);
-
-        try {
-            // Insert the colored box
-            doc.insertString(doc.getLength(), "  ", boxStyle);
-            // Insert the text with the specified text color
-            doc.insertString(doc.getLength(), message, textStyle);
-            // Move caret position to the end
-            chatPane.setCaretPosition(doc.getLength());
-            // Typing animation
-            animateTyping(chatPane, doc.getLength() - message.length(), doc.getLength());
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }
+    private void appendToChat(String message, boolean isUser) {
+        StyledDocument styledDoc = chatPane.getStyledDocument();
+        addStyledText(styledDoc, message + "\n", isUser ? userPromptColor : robotResponseColor);
+        // Typing animation
+        animateTyping();
     }
 
-
-    private void animateTyping(JTextComponent component, int start, int end) {
+    private void animateTyping() {
         Timer timer = new Timer(50, new ActionListener() {
-            private int currentIndex = start;
+            private int currentIndex = inputField.getText().length();
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (currentIndex <= end) {
-                    try {
-                        component.setCaretPosition(currentIndex);
-                        component.setSelectionStart(currentIndex);
-                        component.setSelectionEnd(currentIndex + 1);
-                    } catch (IllegalArgumentException ex) {
-                        // Ignore
-                    }
-                    currentIndex++;
+                if (currentIndex <= inputField.getText().length()) {
+                    inputField.setCaretPosition(currentIndex);
                 } else {
                     ((Timer) e.getSource()).stop();
-                    component.setCaretPosition(component.getDocument().getLength());
+                    inputField.setCaretPosition(inputField.getText().length());
                 }
+                currentIndex++;
             }
         });
         timer.start();
+    }
+
+    private void addStyledText(StyledDocument doc, String text, Color color) {
+        SimpleAttributeSet set = new SimpleAttributeSet();
+        StyleConstants.setForeground(set, color);
+        StyleConstants.setBold(set, true); // Make the text bold
+        StyleConstants.setItalic(set, false); // Make the text not italic
+        StyleConstants.setFontFamily(set, "Montserrat"); // Set the font family
+        StyleConstants.setFontSize(set, 14); // Set the font size
+        try {
+            doc.insertString(doc.getLength(), text, set);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
