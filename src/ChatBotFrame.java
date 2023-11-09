@@ -22,23 +22,19 @@ public class ChatBotFrame extends JFrame {
     public ChatBotFrame(String title) {
         super(title);
 
-        // Set the layout manager
         setLayout(new BorderLayout());
 
-        // Create chat area
+        // chat area
         chatPane = new JTextPane();
         chatPane.setEditable(false);
         chatPane.setBackground(chatAreaColor);
         chatPane.setForeground(textColor);
         chatPane.setFont(textFont);
 
-        // Set up styled document for formatting
-        StyledDocument styledDoc = chatPane.getStyledDocument();
-
         JScrollPane scrollPane = new JScrollPane(chatPane);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-        // Create input field
+        // input field made
         inputField = new JTextField();
         inputField.setBorder(BorderFactory.createCompoundBorder(
                 inputField.getBorder(),
@@ -48,7 +44,7 @@ public class ChatBotFrame extends JFrame {
         inputField.setForeground(textColor);
         inputField.setFont(textFont);
 
-        // Make pressing "Enter" submit
+        // listen for "Enter"
         inputField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -58,7 +54,7 @@ public class ChatBotFrame extends JFrame {
             }
         });
 
-        // Create submit button with resized icon
+        // submit button
         ImageIcon submitIcon = new ImageIcon(getClass().getResource("/icon.png")); // Replace with your icon file name
         ImageIcon resizedIcon = new ImageIcon(submitIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         submitButton = new JButton(resizedIcon);
@@ -72,7 +68,7 @@ public class ChatBotFrame extends JFrame {
             }
         });
 
-        // Add components to the frame
+        // Adding all things to the frame
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BorderLayout());
         inputPanel.setBackground(backgroundColor);
@@ -83,7 +79,7 @@ public class ChatBotFrame extends JFrame {
         getContentPane().add(scrollPane, BorderLayout.CENTER);
         getContentPane().add(inputPanel, BorderLayout.SOUTH);
 
-        // Set up animated typing cursor
+        // animation for carrot typing
         cursorTimer = new Timer(500, new ActionListener() {
             private boolean cursorVisible = true;
 
@@ -104,7 +100,7 @@ public class ChatBotFrame extends JFrame {
             }
         });
 
-        // Set frame properties
+        // Sframe properties to exit on close and width/size
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 600);
         setLocationRelativeTo(null); // Center the frame
@@ -115,21 +111,21 @@ public class ChatBotFrame extends JFrame {
         String userInput = inputField.getText().trim();
         if (!userInput.isEmpty()) {
             appendToChat("User: " + userInput, true);
-            // Add your chatbot logic here
-            // For simplicity, let's just echo the user input
-            appendToChat("ChatBot: " + userInput, false);
-            inputField.setText("");
+            // WE NEED TO ADD CHAT BOT LOGIC HERE
+
+            appendToChat("ChatBot: " + userInput, false); // place holder. remove once ready to add logic
+            inputField.setText(""); // place holder. remove once ready to add logic
         }
     }
 
     private void appendToChat(String message, boolean isUser) {
         StyledDocument styledDoc = chatPane.getStyledDocument();
         addStyledText(styledDoc, message + "\n", isUser ? userPromptColor : robotResponseColor);
-        // Typing animation
-        animateTyping();
+        // Typing displayed
+        displayToChat();
     }
 
-    private void animateTyping() {
+    private void displayToChat() {
         Timer timer = new Timer(50, new ActionListener() {
             private int currentIndex = inputField.getText().length();
 
@@ -150,10 +146,10 @@ public class ChatBotFrame extends JFrame {
     private void addStyledText(StyledDocument doc, String text, Color color) {
         SimpleAttributeSet set = new SimpleAttributeSet();
         StyleConstants.setForeground(set, color);
-        StyleConstants.setBold(set, true); // Make the text bold
-        StyleConstants.setItalic(set, false); // Make the text not italic
-        StyleConstants.setFontFamily(set, "Montserrat"); // Set the font family
-        StyleConstants.setFontSize(set, 14); // Set the font size
+        StyleConstants.setBold(set, true);
+        StyleConstants.setItalic(set, false);
+        StyleConstants.setFontFamily(set, "Montserrat");
+        StyleConstants.setFontSize(set, 14);
         try {
             doc.insertString(doc.getLength(), text, set);
         } catch (BadLocationException e) {
