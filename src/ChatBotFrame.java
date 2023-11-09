@@ -89,15 +89,20 @@ public class ChatBotFrame extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (cursorVisible) {
-                    inputField.setCaretColor(textColor); // Change cursor color to white
-                } else {
-                    inputField.setCaretColor(backgroundColor);
-                }
+                inputField.setCaretColor(textColor); // Change cursor color to white
                 cursorVisible = !cursorVisible;
             }
         });
         cursorTimer.start();
+
+        inputField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    sendMessage();
+                }
+            }
+        });
 
         // Set frame properties
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
