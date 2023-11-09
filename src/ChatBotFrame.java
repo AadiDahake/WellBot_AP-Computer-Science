@@ -12,8 +12,8 @@ public class ChatBotFrame extends JFrame {
     private Color backgroundColor = new Color(40, 40, 40);
     private Color chatAreaColor = new Color(43, 43, 43);
     private Color textColor = new Color(253, 250, 236);
-    private Color userPromptColor = new Color(255, 251, 240); // Off-white
-    private Color robotResponseColor = new Color(206, 102, 206); // Pastel purple
+    private Color userPromptColor = new Color(255, 251, 240);
+    private Color robotResponseColor = new Color(206, 102, 206);
     private Font textFont = new Font("Montserrat", Font.PLAIN, 14);
 
     public ChatBotFrame(String title) {
@@ -34,14 +34,22 @@ public class ChatBotFrame extends JFrame {
         // input field made
         inputField = new JTextField("Type here...");
         inputField.setBorder(BorderFactory.createCompoundBorder(
-                inputField.getBorder(),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                BorderFactory.createEmptyBorder(5, 5, 5, 5),
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(chatAreaColor, 2, true), // Rounded border
+                        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                )
         ));
         inputField.setBackground(chatAreaColor);
-        inputField.setForeground(new Color(169, 169, 169)); // RGB: 169, 169, 169 (Dark Gray)
+        inputField.setForeground(new Color(169, 169, 169));
         inputField.setFont(textFont);
 
-        // Clear the placeholder text when the user clicks on the input field
+        // Grey line above text box
+        JPanel linePanel = new JPanel();
+        linePanel.setBackground(Color.GRAY);
+        linePanel.setPreferredSize(new Dimension(400, 2)); // Adjust the width as needed
+
+        // Clear the placeholder text
         inputField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -78,6 +86,7 @@ public class ChatBotFrame extends JFrame {
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BorderLayout());
         inputPanel.setBackground(backgroundColor);
+        inputPanel.add(linePanel, BorderLayout.NORTH);
         inputPanel.add(inputField, BorderLayout.CENTER);
         inputPanel.add(submitButton, BorderLayout.EAST);
 
@@ -91,7 +100,7 @@ public class ChatBotFrame extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                inputField.setCaretColor(textColor); // Change cursor color to white
+                inputField.setCaretColor(textColor);
                 cursorVisible = !cursorVisible;
             }
         });
@@ -106,10 +115,10 @@ public class ChatBotFrame extends JFrame {
             }
         });
 
-        // Sframe properties to exit on close and width/size
+        // Set frame properties to exit on close and width/size
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 600);
-        setLocationRelativeTo(null); // Center the frame
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
