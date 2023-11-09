@@ -1,10 +1,7 @@
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class ChatBotFrame extends JFrame {
     private JTextPane chatPane;
@@ -13,10 +10,10 @@ public class ChatBotFrame extends JFrame {
     private Timer cursorTimer;
 
     private Color backgroundColor = new Color(40, 40, 40);
-    private Color chatAreaColor = new Color(60, 60, 60);
-    private Color textColor = new Color(255, 255, 255);
-    private Color userPromptColor = new Color(240, 240, 240); // Off-white
-    private Color robotResponseColor = new Color(180, 90, 180); // Pastel purple
+    private Color chatAreaColor = new Color(43, 43, 43);
+    private Color textColor = new Color(253, 250, 236);
+    private Color userPromptColor = new Color(255, 251, 240); // Off-white
+    private Color robotResponseColor = new Color(206, 102, 206); // Pastel purple
     private Font textFont = new Font("Montserrat", Font.PLAIN, 14);
 
     public ChatBotFrame(String title) {
@@ -35,21 +32,30 @@ public class ChatBotFrame extends JFrame {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         // input field made
-        inputField = new JTextField();
+        inputField = new JTextField("Type here...");
         inputField.setBorder(BorderFactory.createCompoundBorder(
                 inputField.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
         inputField.setBackground(chatAreaColor);
-        inputField.setForeground(textColor);
+        inputField.setForeground(new Color(169, 169, 169)); // RGB: 169, 169, 169 (Dark Gray)
         inputField.setFont(textFont);
 
-        // listen for "Enter"
-        inputField.addKeyListener(new KeyAdapter() {
+        // Clear the placeholder text when the user clicks on the input field
+        inputField.addFocusListener(new FocusAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    sendMessage();
+            public void focusGained(FocusEvent e) {
+                if ("Type here...".equals(inputField.getText())) {
+                    inputField.setText("");
+                    inputField.setForeground(textColor);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (inputField.getText().isEmpty()) {
+                    inputField.setText("Type here...");
+                    inputField.setForeground(new Color(169, 169, 169));
                 }
             }
         });
@@ -120,10 +126,15 @@ public class ChatBotFrame extends JFrame {
 
     private void appendToChat(String message, boolean isUser) {
         StyledDocument styledDoc = chatPane.getStyledDocument();
-        addStyledText(styledDoc, message + "\n", isUser ? userPromptColor : robotResponseColor);
-        // Typing displayed
+
+        addStyledText(styledDoc, isUser ? "User: " : "ChatBot: ", isUser ? new Color(148, 218, 255) : new Color(88, 144, 255));
+
+        addStyledText(styledDoc, message.substring(isUser ? 5 : 8) + "\n", isUser ? userPromptColor : robotResponseColor);
+
+        // Text Display
         displayToChat();
     }
+
 
     private void displayToChat() {
         Timer timer = new Timer(50, new ActionListener() {
