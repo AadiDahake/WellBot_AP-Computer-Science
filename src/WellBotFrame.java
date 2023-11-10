@@ -5,11 +5,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
-public class ChatBotFrame extends JFrame {
+public class WellBotFrame extends JFrame {
     private JTextPane chatPane;
     private JTextField inputField;
     private JButton submitButton;
@@ -22,7 +19,7 @@ public class ChatBotFrame extends JFrame {
     private Color robotResponseColor = new Color(206, 102, 206);
     private Font textFont = new Font("Montserrat", Font.PLAIN, 14);
 
-    public ChatBotFrame(String title) {
+    public WellBotFrame(String title) {
         super(title);
 
 
@@ -138,11 +135,11 @@ public class ChatBotFrame extends JFrame {
         String userInput = inputField.getText().trim();
         if (!userInput.isEmpty()) {
             if (!"Type here...".equals(userInput)) {
-                appendToChat("User: " + userInput, true);
+                appendToChat("You: " + userInput, true);
                 // WE NEED TO ADD CHAT BOT LOGIC HERE
 
-                String botResponse = ChatBot.respondTo(userInput);
-                appendToChat("ChatBot: " + botResponse, false);
+                String botResponse = WellBot.respondTo(userInput);
+                appendToChat("WellBot: " + botResponse, false);
 
                 inputField.setText("");
             }
@@ -152,7 +149,7 @@ public class ChatBotFrame extends JFrame {
     private void appendToChat(String message, boolean isUser) {
         StyledDocument styledDoc = chatPane.getStyledDocument();
 
-        addStyledText(styledDoc, isUser ? "User: " : "ChatBot: ", isUser ? new Color(148, 218, 255) : new Color(88, 144, 255));
+        addStyledText(styledDoc, isUser ? "You: " : "WellBot: ", isUser ? new Color(148, 218, 255) : new Color(88, 144, 255));
 
         addStyledText(styledDoc, message.substring(isUser ? 5 : 8) + "\n", isUser ? userPromptColor : robotResponseColor);
 
@@ -195,14 +192,14 @@ public class ChatBotFrame extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new ChatBotFrame("ChatBot");
+            new WellBotFrame("WellBot");
         });
     }
 
     private void setWindowIcon() {
         try {
 
-            BufferedImage iconImage = ImageIO.read(getClass().getResource("/icon.png"));
+            BufferedImage iconImage = ImageIO.read(getClass().getResource("/WellBotLogo.png"));
 
 
             setIconImage(iconImage);
