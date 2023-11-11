@@ -131,11 +131,27 @@ public class WellBotFrame extends JFrame {
         setSize(400, 600);
         setLocationRelativeTo(null);
         setVisible(true);
+
+        appendToChat("        Hello! I am WellBot. I am here to answer your medical questions regarding your symptoms! If you want to exit type \"Bye\".", false);
+
     }
 
     private void sendMessage() {
         String userInput = inputField.getText().trim();
         if (!userInput.isEmpty()) {
+            if ("bye".equalsIgnoreCase(userInput.toLowerCase())) {
+                appendToChat("WellBot: Goodbye! If you have more questions, feel free to ask later.", false);
+                inputField.setText("");
+                Timer exitTimer = new Timer(2000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        System.exit(0);
+                    }
+                });
+                exitTimer.setRepeats(false);
+                exitTimer.start();
+                return;
+            }
             if (!"Type here...".equals(userInput)) {
                 appendToChat("You: " + userInput, true);
 
