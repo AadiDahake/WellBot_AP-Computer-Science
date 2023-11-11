@@ -1,3 +1,5 @@
+import Subclasses.WellBotFrame;
+
 import javax.swing.*;
 
 public class Main {

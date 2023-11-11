@@ -1,3 +1,5 @@
+package Subclasses;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.*;
@@ -45,7 +47,7 @@ public class WellBotFrame extends JFrame {
         inputField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(5, 5, 5, 5),
                 BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(chatAreaColor, 2, true), // Rounded border
+                        BorderFactory.createLineBorder(chatAreaColor, 2, true),
                         BorderFactory.createEmptyBorder(5, 10, 5, 10)
                 )
         ));
@@ -56,7 +58,7 @@ public class WellBotFrame extends JFrame {
         // Grey line above text box
         JPanel linePanel = new JPanel();
         linePanel.setBackground(Color.GRAY);
-        linePanel.setPreferredSize(new Dimension(400, 2)); // Adjust the width as needed
+        linePanel.setPreferredSize(new Dimension(400, 2));
 
         // Clear the placeholder text
         inputField.addFocusListener(new FocusAdapter() {
@@ -78,7 +80,7 @@ public class WellBotFrame extends JFrame {
         });
 
         // submit button
-        ImageIcon submitIcon = new ImageIcon(getClass().getResource("/icon.png"));
+        ImageIcon submitIcon = new ImageIcon(getClass().getResource("/Logos/submitButton.png"));
         ImageIcon resizedIcon = new ImageIcon(submitIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         submitButton = new JButton(resizedIcon);
         submitButton.setBackground(chatAreaColor);
@@ -136,7 +138,8 @@ public class WellBotFrame extends JFrame {
         if (!userInput.isEmpty()) {
             if (!"Type here...".equals(userInput)) {
                 appendToChat("You: " + userInput, true);
-                // WE NEED TO ADD CHAT BOT LOGIC HERE
+
+                //CHATBOT LOGIC
 
                 String botResponse = WellBot.respondTo(userInput);
                 appendToChat("WellBot: " + botResponse, false);
@@ -199,7 +202,7 @@ public class WellBotFrame extends JFrame {
     private void setWindowIcon() {
         try {
 
-            BufferedImage iconImage = ImageIO.read(getClass().getResource("/WellBotLogo.png"));
+            BufferedImage iconImage = ImageIO.read(getClass().getResource("/Logos/WellBotLogo.png"));
 
 
             setIconImage(iconImage);
