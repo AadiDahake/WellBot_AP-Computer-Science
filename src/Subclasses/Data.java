@@ -11,14 +11,14 @@ public class Data {
             "Not sure what you're looking for? You can ask about topics like nutrition, exercise, or specific symptoms for personalized information.",
             "Your health is important! Have you been in touch with your doctor recently?, or if you have questions about common health topics.",
             "I'm here to provide support and information. If you're uncertain about a health issue or want advice, go ahead and ask!",
-            "Is there anything you'd like assistance with regarding your daily activities?", "Is there a book, movie, or TV show you'd like to enjoy right now?","Would you like me to bring you anything to help pass the time?","How about a board game or some music?",
+            "Is there anything you'd like assistance with regarding your daily activities?", "Is there a book, movie, or TV show you'd like to enjoy right now?", "Would you like me to bring you anything to help pass the time?", "How about a board game or some music?",
             "Whether it's a question about a specific ailment or general well-being, feel free to share, and I'll provide information to the best of my ability.",
             "Have you noticed any changes in your symptoms? Ask me anything from nutrition tips to advice on staying active.",
             "Your health matters. If you're unsure about something or have a health-related question, don't hesitate to ask for guidance.",
             "Let's talk about health! Whether it's a query about healthy habits or concerns about specific symptoms, I'm here to help.",
-            "What did the doctor say about your current condition?","Are you following the prescribed treatment plan?", "Is there anything I can do to make you more comfortable?",
+            "What did the doctor say about your current condition?", "Are you following the prescribed treatment plan?", "Is there anything I can do to make you more comfortable?",
             "Have you been taking your medications as prescribed?", "Are you experiencing any side effects from the medication?", "Have you found any relief from the symptoms?",
-            "Is there anything specific you feel like eating or avoiding?", "Have you been able to maintain a healthy diet?", "Are you staying hydrated?","Is there anything on your mind that you want to talk about?",
+            "Is there anything specific you feel like eating or avoiding?", "Have you been able to maintain a healthy diet?", "Are you staying hydrated?", "Is there anything on your mind that you want to talk about?",
             "Do you have any specific plans for today?"
     };
     private static Map<String, SymptomInfo> medicalInfo = new HashMap<>();
@@ -36,11 +36,11 @@ public class Data {
         medicalInfo.put("joke", new SymptomInfo("Why did the doctor carry a red pen? In case they needed to draw blood!", false));
         medicalInfo.put("thanks", new SymptomInfo("You're welcome! If you have more questions, feel free to ask.", false));
         medicalInfo.put("bye", new SymptomInfo("Goodbye! Take care of your health.", false));
-        medicalInfo.put("muscle pain",new SymptomInfo("Muscle Pain is common, and it could be resolved by some medications do you want me to provide you some medications",true));
-        medicalInfo.put("tired",new SymptomInfo("Tired or Muscle fatigue is common and it is curable. It could be felt when working hard or during worn out times. ",true));
-        medicalInfo.put("cancer",new SymptomInfo("It is curable during the initial stages and rush to doctor immediately",false));
-        medicalInfo.put("stomach pain",new SymptomInfo("The pain could have been felt because of some improper food and it could be cured with some medications.",true));
-        medicalInfo.put("fracture",new SymptomInfo("It could have been caused due to a break in the bone it is curable and rush to the doctor",true));
+        medicalInfo.put("muscle pain", new SymptomInfo("Muscle Pain is common, and it could be resolved by some medications do you want me to provide you some medications", true));
+        medicalInfo.put("tired", new SymptomInfo("Tired or Muscle fatigue is common and it is curable. It could be felt when working hard or during worn out times. ", true));
+        medicalInfo.put("cancer", new SymptomInfo("It is curable during the initial stages and rush to doctor immediately", false));
+        medicalInfo.put("stomach pain", new SymptomInfo("The pain could have been felt because of some improper food and it could be cured with some medications.", true));
+        medicalInfo.put("fracture", new SymptomInfo("It could have been caused due to a break in the bone it is curable and rush to the doctor", true));
     }
 
     public static Map<String, SymptomInfo> getMedicalInfo() {
