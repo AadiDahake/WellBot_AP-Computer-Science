@@ -21,7 +21,7 @@ public class WellBot {
             return medicalResponse + "\n";
         }
 
-        return handleGenericQuery(userInput) + "\n";
+        return handleRandomInput(userInput) + "\n";
     }
 
     private static String getMedicalResponse(String userInput) {
@@ -44,7 +44,7 @@ public class WellBot {
         return null;
     }
 
-    private static String handleGenericQuery(String userInput) {
+    private static String handleRandomInput(String userInput) {
         if (awaitingRecommendations) {
             if (isAffirmativeResponse(userInput)) {
 
@@ -62,16 +62,16 @@ public class WellBot {
         }
 
 
-        String[] words = userInput.split("\\s+");
-        for (String word : words) {
-            String[] synonyms = getSynonyms(word).toArray(new String[0]);
-            for (String synonym : synonyms) {
-                String medicalResponse = getMedicalResponse(synonym);
-                if (medicalResponse != null) {
-                    return medicalResponse;
-                }
-            }
-        }
+//        String[] words = userInput.split("\\s+");
+//        for (String word : words) {
+//            String[] synonyms = getSynonyms(word).toArray(new String[0]);
+//            for (String synonym : synonyms) {
+//                String medicalResponse = getMedicalResponse(synonym);
+//                if (medicalResponse != null) {
+//                    return medicalResponse;
+//                }
+//            }
+//        }
 
         String correctedWord = getCorrectedWord(userInput);
         if (correctedWord != null) {
@@ -91,7 +91,7 @@ public class WellBot {
     }
 
     private static boolean betterSearch(String input, String key) {
-        String pattern = "\\b" + Pattern.quote(key) + "\\b";
+        String pattern = "\\b" + Pattern.quote(key) + "s?\\b";
         Pattern sentence = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
 
         Matcher matcher = sentence.matcher(input);
@@ -99,14 +99,15 @@ public class WellBot {
         return matcher.find();
     }
 
-    private static List<String> getSynonyms(String word) {
-        List<String> synonymsList = new ArrayList<>();
-
-        String[] synonyms = getWordsFromApi("https://api.datamuse.com/words?ml=" + word);
-        synonymsList.addAll(Arrays.asList(synonyms));
-
-        return synonymsList;
-    }
+//    private static List<String> getSynonyms(String word) {
+//        List<String> synonymsList = new ArrayList<>();
+//
+//        if (!(word.toLowerCase().equals("to")) && !(word.toLowerCase().equals("side")) && !(word.toLowerCase().equals("better")) && !(word.toLowerCase().equals("test"))) {
+//            String[] synonyms = getWordsFromApi("https://api.datamuse.com/words?ml=" + word);
+//            synonymsList.addAll(Arrays.asList(synonyms));
+//        }
+//        return synonymsList;
+//    }
 
     private static String getCorrectedWord(String word) {
         String[] suggestions = getWordsFromApi("https://api.datamuse.com/sug?s=" + word);
